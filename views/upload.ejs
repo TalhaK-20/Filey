@@ -1,0 +1,47 @@
+<section class="upload-page">
+  <h1>Drop It. Share It.</h1>
+  <p class="tagline">One file, one link, out the door in seconds.</p>
+
+  <form id="upload-form" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+    <label class="dropzone" id="dropzone" data-max-bytes="<%= maxUploadBytes %>">
+      <input type="file" name="file" id="file-input" required />
+      <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path d="M12 15.5V4M12 4l-4 4M12 4l4 4" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M4 15.5v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span id="dropzone-label">Choose a file or drag it here</span>
+    </label>
+    <p class="progress-detail">Maximum file size: <%= Math.floor(maxUploadBytes / (1024 * 1024)) %> MB</p>
+
+    <label>
+      Category
+      <select name="category">
+        <option value="">Auto-detect</option>
+        <% categories.forEach(function(cat) { %>
+          <option value="<%= cat %>"><%= cat %></option>
+        <% }); %>
+      </select>
+    </label>
+
+    <label>
+      Description (optional)
+      <textarea name="description" maxlength="2000" placeholder="What is this file?"></textarea>
+    </label>
+
+    <button type="submit" class="btn-primary btn-large" id="upload-submit">Share It</button>
+  </form>
+
+  <div id="upload-progress" class="upload-progress hidden">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+    <p id="progress-text">0%</p>
+    <p id="progress-detail" class="progress-detail"></p>
+  </div>
+
+  <div id="upload-result" class="upload-result hidden"></div>
+</section>
+
+<script src="/js/upload.js"></script>

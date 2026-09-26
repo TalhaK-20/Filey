@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FILEY">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e2227" />
+      <stop offset="100%" stop-color="#121417" />
+    </linearGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3ddc84" />
+      <stop offset="100%" stop-color="#34d6c4" />
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="url(#bg)" stroke="#2b2f35" stroke-width="1" />
+  <path
+    d="M18 16 L32 31 L46 16 M32 31 L32 49"
+    fill="none"
+    stroke="url(#mark)"
+    stroke-width="9"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

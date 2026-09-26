@@ -1,0 +1,64 @@
+<section class="hero">
+  <h1>FILE<span class="logo-accent">Y</span></h1>
+  <p class="tagline">Simple. Fast. Share.</p>
+
+  <span class="btn-hero-wrap">
+    <a href="/upload" class="btn-primary btn-large btn-hero">
+      Share a File
+      <%- icon('arrow-right', { className: 'icon-inline' }) %>
+    </a>
+  </span>
+</section>
+
+<section class="stats-bar">
+  <div class="stat-card">
+    <span class="stat-value js-count" data-count="<%= stats.totalFiles || 0 %>">0</span>
+    <span class="stat-label">Files Shared</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-value js-count" data-count="<%= stats.totalDownloads || 0 %>">0</span>
+    <span class="stat-label">Downloads</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-value js-filesize" data-bytes="<%= stats.totalSize || 0 %>"><%= stats.totalSize || 0 %> B</span>
+    <span class="stat-label">Total Shared Size</span>
+  </div>
+</section>
+
+<section class="categories-bar">
+  <% categories.forEach(function(cat) { %>
+    <a href="/search?category=<%= encodeURIComponent(cat) %>" class="category-chip">
+      <%= cat %> <span class="chip-count"><%= categoryCounts[cat] || 0 %></span>
+    </a>
+  <% }); %>
+</section>
+
+<section class="file-section">
+  <h2>Recent Files</h2>
+  <% if (recent.length === 0) { %>
+    <p class="empty-state">No files yet. <a href="/upload">Be the first to share one.</a></p>
+  <% } else { %>
+    <div class="file-table">
+      <div class="file-table-head file-row-home">
+        <span>File Name</span><span>Type</span><span>Size</span><span>Downloads</span><span>Actions</span>
+      </div>
+      <% recent.forEach(function(file) { %>
+        <div class="file-row file-row-home" data-file-id="<%= file._id %>">
+          <a href="/files/<%= file._id %>" class="file-name"><%= file.originalName %></a>
+          <span><%= file.category %></span>
+          <span class="js-filesize" data-bytes="<%= file.size %>"><%= file.size %> B</span>
+          <span><%= file.downloadCount %></span>
+          <span class="icon-actions">
+            <button type="button" class="icon-btn js-share-file" data-id="<%= file._id %>" aria-label="Copy share link" title="Copy share link"><%- icon('share') %></button>
+            <a class="icon-btn" href="/files/<%= file._id %>/download" aria-label="Download" title="Download"><%- icon('download') %></a>
+            <% if (typeof currentUser !== 'undefined' && currentUser && file.uploader && file.uploader._id === currentUser.id) { %>
+              <button type="button" class="icon-btn is-danger js-delete-file" data-id="<%= file._id %>" aria-label="Delete file" title="Delete file"><%- icon('delete') %></button>
+            <% } %>
+          </span>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+</section>
+
+<script src="/js/fileActions.js"></script>

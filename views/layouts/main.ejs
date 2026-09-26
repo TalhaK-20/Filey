@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title : 'FILEY' %></title>
+  <meta name="description" content="FILEY — Simple. Fast. Share. A lightweight file sharing app." />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="alternate icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="mask-icon" href="/mask-icon.svg" color="#3ddc84" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#121417" />
+
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body data-csrf="<%= csrfToken %>">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">FILE<span class="logo-accent">Y</span></a>
+
+      <form class="nav-search" action="/search" method="GET">
+        <input type="text" name="q" placeholder="Search files..." aria-label="Search files" value="<%= typeof query !== 'undefined' && query.q ? query.q : '' %>" />
+        <button type="submit">Search</button>
+      </form>
+
+      <nav class="nav-links">
+        <a href="/upload">Share</a>
+        <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+          <a href="/profile">Profile</a>
+          <% if (currentUser.role === 'admin') { %>
+            <a href="/admin">Admin</a>
+          <% } %>
+          <form action="/logout" method="POST" class="inline-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <button type="submit" class="link-button">Logout</button>
+          </form>
+        <% } else { %>
+          <a href="/login">Login</a>
+          <a href="/register" class="btn-ghost">Register</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page">
+    <%- body %>
+  </main>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>FILEY — Simple. Fast. Share.</p>
+      <p class="footer-note">Please only share files you have the right to distribute.</p>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

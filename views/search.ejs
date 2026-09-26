@@ -1,0 +1,63 @@
+<section class="search-header">
+  <h1>Search Files</h1>
+  <form class="filter-form" action="/search" method="GET">
+    <input type="text" name="q" placeholder="Filename, extension..." value="<%= query.q %>" />
+
+    <select name="category">
+      <option value="">All Categories</option>
+      <% categories.forEach(function(cat) { %>
+        <option value="<%= cat %>" <%= query.category === cat ? 'selected' : '' %>><%= cat %></option>
+      <% }); %>
+    </select>
+
+    <input type="text" name="extension" placeholder="Extension (e.g. pdf)" value="<%= query.extension %>" />
+
+    <select name="sort">
+      <option value="relevance" <%= query.sort === 'relevance' ? 'selected' : '' %>>Relevance</option>
+      <option value="newest" <%= query.sort === 'newest' ? 'selected' : '' %>>Newest</option>
+      <option value="downloads" <%= query.sort === 'downloads' ? 'selected' : '' %>>Most Downloaded</option>
+      <option value="largest" <%= query.sort === 'largest' ? 'selected' : '' %>>Largest</option>
+      <option value="smallest" <%= query.sort === 'smallest' ? 'selected' : '' %>>Smallest</option>
+    </select>
+
+    <button type="submit" class="btn-primary">Filter</button>
+  </form>
+</section>
+
+<section class="file-section">
+  <p class="result-count"><%= total %> result<%= total === 1 ? '' : 's' %></p>
+
+  <% if (results.length === 0) { %>
+    <p class="empty-state">No files matched your search. Try a different term or browse by category.</p>
+  <% } else { %>
+    <div class="file-table">
+      <div class="file-table-head">
+        <span>File Name</span><span>Type</span><span>Size</span><span>Category</span><span>Shared</span><span>Downloads</span><span>Shared by</span><span></span>
+      </div>
+      <% results.forEach(function(file) { %>
+        <div class="file-row file-row-full">
+          <a href="/files/<%= file._id %>" class="file-name"><%= file.originalName %></a>
+          <span><%= file.extension.toUpperCase() %></span>
+          <span class="js-filesize" data-bytes="<%= file.size %>"><%= file.size %> B</span>
+          <span><%= file.category %></span>
+          <span class="js-date" data-date="<%= file.createdAt.toISOString() %>"><%= file.createdAt.toDateString() %></span>
+          <span><%= file.downloadCount %></span>
+          <span><%= file.uploader ? file.uploader.username : file.uploaderName %></span>
+          <a href="/files/<%= file._id %>/download" class="btn-ghost btn-small">Download</a>
+        </div>
+      <% }); %>
+    </div>
+
+    <nav class="pagination">
+      <% if (page > 1) { %>
+        <a href="/search?q=<%= encodeURIComponent(query.q) %>&category=<%= encodeURIComponent(query.category) %>&extension=<%= encodeURIComponent(query.extension) %>&sort=<%= query.sort %>&page=<%= page - 1 %>">&laquo; Prev</a>
+      <% } %>
+      <span>Page <%= page %> of <%= totalPages %></span>
+      <% if (page < totalPages) { %>
+        <a href="/search?q=<%= encodeURIComponent(query.q) %>&category=<%= encodeURIComponent(query.category) %>&extension=<%= encodeURIComponent(query.extension) %>&sort=<%= query.sort %>&page=<%= page + 1 %>">Next &raquo;</a>
+      <% } %>
+    </nav>
+  <% } %>
+</section>
+
+<script src="/js/search.js"></script>

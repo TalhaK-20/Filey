@@ -1,0 +1,45 @@
+<section class="profile-page">
+  <h1><%= currentUser.username %>'s Profile</h1>
+
+  <div class="stats-bar">
+    <div class="stat-card">
+      <span class="stat-value js-count" data-count="<%= files.length %>">0</span>
+      <span class="stat-label">Files Shared</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value js-count" data-count="<%= stats.totalDownloads || 0 %>">0</span>
+      <span class="stat-label">Total Downloads</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value js-filesize" data-bytes="<%= stats.totalSize || 0 %>"><%= stats.totalSize || 0 %> B</span>
+      <span class="stat-label">Total Shared Size</span>
+    </div>
+  </div>
+
+  <h2>Your Files</h2>
+  <% if (files.length === 0) { %>
+    <p class="empty-state">Nothing out there yet. <a href="/upload">Share your first file.</a></p>
+  <% } else { %>
+    <div class="file-table">
+      <div class="file-table-head file-row-profile">
+        <span>File Name</span><span>Type</span><span>Size</span><span>Status</span><span>Downloads</span><span>Actions</span>
+      </div>
+      <% files.forEach(function(file) { %>
+        <div class="file-row file-row-profile" data-file-id="<%= file._id %>">
+          <a href="/files/<%= file._id %>" class="file-name"><%= file.originalName %></a>
+          <span><%= file.category %></span>
+          <span class="js-filesize" data-bytes="<%= file.size %>"><%= file.size %> B</span>
+          <span class="status-badge status-<%= file.status %>"><%= file.status %></span>
+          <span><%= file.downloadCount %></span>
+          <span class="icon-actions">
+            <button type="button" class="icon-btn js-share-file" data-id="<%= file._id %>" aria-label="Copy share link" title="Copy share link"><%- icon('share') %></button>
+            <a class="icon-btn" href="/files/<%= file._id %>/download" aria-label="Download" title="Download"><%- icon('download') %></a>
+            <button type="button" class="icon-btn is-danger js-delete-file" data-id="<%= file._id %>" aria-label="Delete file" title="Delete file"><%- icon('delete') %></button>
+          </span>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+</section>
+
+<script src="/js/fileActions.js"></script>

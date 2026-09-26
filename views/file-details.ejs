@@ -1,0 +1,53 @@
+<section class="file-details">
+  <div class="file-title-row">
+    <h1><%= file.originalName %></h1>
+    <span class="icon-actions">
+      <a class="icon-btn" href="/files/<%= file._id %>/download" aria-label="Download" title="Download"><%- icon('download') %></a>
+      <button type="button" class="icon-btn js-share-file" data-id="<%= file._id %>" aria-label="Copy share link" title="Copy share link"><%- icon('share') %></button>
+      <% if (typeof currentUser !== 'undefined' && currentUser && file.uploader && file.uploader._id === currentUser.id) { %>
+        <button type="button" class="icon-btn is-danger js-delete-file" data-id="<%= file._id %>" aria-label="Delete file" title="Delete file"><%- icon('delete') %></button>
+      <% } %>
+    </span>
+  </div>
+
+  <dl class="detail-grid">
+    <dt>Type</dt><dd><%= file.extension.toUpperCase() %> (<%= file.mimeType %>)</dd>
+    <dt>Size</dt><dd class="js-filesize" data-bytes="<%= file.size %>"><%= file.size %> B</dd>
+    <dt>Category</dt><dd><%= file.category %></dd>
+    <dt>Shared</dt><dd class="js-date" data-date="<%= file.createdAt.toISOString() %>"><%= file.createdAt.toDateString() %></dd>
+    <dt>Downloads</dt><dd><%= file.downloadCount %></dd>
+    <dt>Shared by</dt><dd><%= file.uploader ? file.uploader.username : file.uploaderName %></dd>
+  </dl>
+
+  <% if (file.description) { %>
+    <div class="description-block">
+      <h3>Description</h3>
+      <p><%= file.description %></p>
+    </div>
+  <% } %>
+
+  <div class="hash-block">
+    <span class="hash-label">SHA-256</span>
+    <code><%= file.checksum %></code>
+  </div>
+
+  <details class="report-block">
+    <summary>Report this file</summary>
+    <form id="report-form" data-file-id="<%= file._id %>">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <select name="reason" required>
+        <option value="">Select a reason</option>
+        <option value="copyright">Copyright infringement</option>
+        <option value="malware">Malware / unsafe content</option>
+        <option value="illegal-content">Illegal content</option>
+        <option value="spam">Spam</option>
+        <option value="other">Other</option>
+      </select>
+      <textarea name="description" placeholder="Additional details (optional)" maxlength="2000"></textarea>
+      <button type="submit" class="btn-ghost">Submit Report</button>
+    </form>
+  </details>
+</section>
+
+<script src="/js/fileActions.js"></script>
+<script src="/js/report.js"></script>

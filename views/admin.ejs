@@ -1,0 +1,82 @@
+<section class="admin-page" data-csrf="<%= csrfToken %>">
+  <h1>Admin Dashboard</h1>
+
+  <div class="stats-bar">
+    <div class="stat-card"><span class="stat-value js-count" data-count="<%= stats.totalFiles || 0 %>">0</span><span class="stat-label">Active Files</span></div>
+    <div class="stat-card"><span class="stat-value js-count" data-count="<%= stats.totalDownloads || 0 %>">0</span><span class="stat-label">Downloads</span></div>
+    <div class="stat-card"><span class="stat-value js-count" data-count="<%= userCount %>">0</span><span class="stat-label">Users</span></div>
+    <div class="stat-card"><span class="stat-value js-count" data-count="<%= openReports.length %>">0</span><span class="stat-label">Open Reports</span></div>
+  </div>
+
+  <h2>Open Reports</h2>
+  <% if (openReports.length === 0) { %>
+    <p class="empty-state">No open reports.</p>
+  <% } else { %>
+    <div class="file-table">
+      <div class="file-table-head">
+        <span>File</span><span>Reason</span><span>Description</span><span>Reported</span><span>Actions</span>
+      </div>
+      <% openReports.forEach(function(report) { %>
+        <div class="file-row file-row-full" data-report-id="<%= report._id %>">
+          <span><%= report.file ? report.file.originalName : '(deleted)' %></span>
+          <span><%= report.reason %></span>
+          <span><%= report.description || '—' %></span>
+          <span class="js-date" data-date="<%= report.createdAt.toISOString() %>"><%= report.createdAt.toDateString() %></span>
+          <span class="admin-actions">
+            <% if (report.file) { %>
+              <button class="btn-ghost btn-small js-admin-action" data-action="block-file" data-id="<%= report.file._id %>">Block File</button>
+              <button class="btn-ghost btn-small js-admin-action" data-action="remove-file" data-id="<%= report.file._id %>">Remove File</button>
+            <% } %>
+            <button class="btn-ghost btn-small js-admin-action" data-action="dismiss-report" data-id="<%= report._id %>">Dismiss</button>
+          </span>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+
+  <h2>Recent Files</h2>
+  <div class="file-table">
+    <div class="file-table-head">
+      <span>File</span><span>Shared by</span><span>Status</span><span>Size</span><span>Actions</span>
+    </div>
+    <% recentFiles.forEach(function(file) { %>
+      <div class="file-row file-row-full" data-file-id="<%= file._id %>">
+        <a href="/files/<%= file._id %>" class="file-name"><%= file.originalName %></a>
+        <span><%= file.uploader ? file.uploader.username : file.uploaderName %></span>
+        <span class="status-badge status-<%= file.status %>"><%= file.status %></span>
+        <span class="js-filesize" data-bytes="<%= file.size %>"><%= file.size %> B</span>
+        <span class="admin-actions">
+          <% if (file.status !== 'blocked') { %>
+            <button class="btn-ghost btn-small js-admin-action" data-action="block-file" data-id="<%= file._id %>">Block</button>
+          <% } %>
+          <% if (file.status !== 'removed') { %>
+            <button class="btn-ghost btn-small js-admin-action" data-action="remove-file" data-id="<%= file._id %>">Remove</button>
+          <% } %>
+          <% if (file.status !== 'active') { %>
+            <button class="btn-ghost btn-small js-admin-action" data-action="restore-file" data-id="<%= file._id %>">Restore</button>
+          <% } %>
+        </span>
+      </div>
+    <% }); %>
+  </div>
+
+  <section class="danger-zone">
+    <h2>Danger Zone</h2>
+    <p>Permanently delete every file on FILEY — for every user, database rows and stored bytes alike. There is no undo.</p>
+    <button type="button" class="btn-ghost is-danger" id="open-delete-all">Delete All Files</button>
+  </section>
+</section>
+
+<dialog id="delete-all-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-icon"><%- icon('warning', { size: 26 }) %></div>
+    <h3>Delete all files?</h3>
+    <p>This removes every file from the database and from storage, for every user on FILEY. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn-ghost" id="cancel-delete-all">Cancel</button>
+      <button type="button" class="btn-primary is-danger" id="confirm-delete-all">Yes, delete everything</button>
+    </div>
+  </div>
+</dialog>
+
+<script src="/js/admin.js"></script>

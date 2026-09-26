@@ -1,0 +1,25 @@
+<section class="auth-page">
+  <h1>Login</h1>
+
+  <% if (error) { %>
+    <p class="form-error"><%= error %></p>
+  <% } %>
+
+  <form action="/login" method="POST" class="auth-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+    <label>
+      Email
+      <input type="email" name="email" required value="<%= formValues.email || '' %>" />
+    </label>
+
+    <label>
+      Password
+      <input type="password" name="password" required minlength="8" />
+    </label>
+
+    <button type="submit" class="btn-primary btn-large">Login</button>
+  </form>
+
+  <p class="auth-switch">Don't have an account? <a href="/register">Register</a></p>
+</section>
