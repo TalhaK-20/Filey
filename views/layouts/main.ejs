@@ -3,8 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= typeof title !== 'undefined' ? title : 'FILEY' %></title>
-  <meta name="description" content="FILEY — Simple. Fast. Share. A lightweight file sharing app." />
+  <% const pageTitle = typeof title !== 'undefined' ? title : 'FILEY'; %>
+  <% const pageDescription = typeof description !== 'undefined' ? description : 'FILEY — Simple. Fast. Share. A lightweight file sharing app.'; %>
+  <% const pageImage = `${baseUrl}/og-image.png`; %>
+  <title><%= pageTitle %></title>
+  <meta name="description" content="<%= pageDescription %>" />
+
+  <!-- Open Graph — what Teams, WhatsApp, Slack, Discord, etc. read for link previews -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="FILEY" />
+  <meta property="og:title" content="<%= pageTitle %>" />
+  <meta property="og:description" content="<%= pageDescription %>" />
+  <meta property="og:image" content="<%= pageImage %>" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="FILEY" />
+  <meta property="og:url" content="<%= currentUrl %>" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="<%= pageTitle %>" />
+  <meta name="twitter:description" content="<%= pageDescription %>" />
+  <meta name="twitter:image" content="<%= pageImage %>" />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="alternate icon" href="/favicon.ico" sizes="48x48" />

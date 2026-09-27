@@ -57,7 +57,11 @@ async function fileDetails(req, res, next) {
         message: 'This file has been blocked and is no longer available.',
       });
     }
-    res.render('file-details', { title: `${file.originalName} — FILEY`, file });
+    res.render('file-details', {
+      title: `${file.originalName} — FILEY`,
+      description: `${file.category} file shared on FILEY — download it instantly, no account needed.`,
+      file,
+    });
   } catch (err) {
     next(err);
   }

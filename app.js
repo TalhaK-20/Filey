@@ -63,6 +63,17 @@ app.use(
   })
 );
 
+// Absolute origin for the current request — needed because Open Graph/Twitter
+// Card meta tags must be absolute URLs; link-preview crawlers (WhatsApp, Teams,
+// Slack, etc.) fetch them directly rather than resolving relative paths in a
+// browser context. Works for localhost, the Vercel domain, or any future custom
+// domain without hardcoding one.
+app.use((req, res, next) => {
+  res.locals.baseUrl = `${req.protocol}://${req.get('host')}`;
+  res.locals.currentUrl = `${res.locals.baseUrl}${req.originalUrl}`;
+  next();
+});
+
 app.use(attachUser);
 app.use(csrfProtection);
 
