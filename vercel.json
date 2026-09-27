@@ -3,7 +3,20 @@
   "builds": [
     {
       "src": "server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "node_modules/file-type/**",
+          "node_modules/strtok3/**",
+          "node_modules/token-types/**",
+          "node_modules/uint8array-extras/**",
+          "node_modules/@tokenizer/**",
+          "node_modules/@borewit/**",
+          "node_modules/ieee754/**",
+          "node_modules/debug/**",
+          "node_modules/ms/**"
+        ]
+      }
     }
   ],
   "routes": [
